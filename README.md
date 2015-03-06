@@ -52,6 +52,13 @@ Supported directives:
     l       read / write uint64_t
     i       switch to Intel (little endian) byte order
     m       switch to Motorola (big endian) byte order
+    [0-9]+  next item repeated n times
+    (       begin of group
+    )       end of group
+    z       skip one byte of input / emit \0
+
+Changes in byte order do not propagate out of the group they are done in.
+A group counts as a single item for repetition.
 
 Future Extensions
 -----------------
@@ -61,18 +68,10 @@ implemented yet. Stay tuned for updates.
 
     regex   meaning
     a[0-9]+ align to multiple of number
-    I       next item in Intel byte order
-    M       next item in Motorola byte order
-    [0-9]+  next item repeated n times
-    (       begin of item group
-    )       end of item group
     {       begin of substructure
     }       end of substructure
     '[^']*' match against string / emit string; escape ' as ''
     "[^"]*" ignore strlen bytes / emit string; escape " as ""
-    z       match \0 / emit \0
-    p       ignore one byte / emit \0
-    P       ignore one byte / emit specified byte (use like Px for fill with x)
     s       consume next structure item but do not read / write
     r       rewind structure
 
@@ -113,15 +112,15 @@ Portability
 These functions are designed to be portable and self-contained. They
 should be suitable for a wide range of hosted and embedded platforms.
 
-This source code makes use of the library functions `memcpy`, `fread`,
-and `fwrite`, the latter two are only required if you plan to use the
-functions `freadf` and `fwritef`. The code does not use any C99 language
-constructs but assumes the presence of a header `stdint.h` providing the
-types `uint8_t`, `uint16_t`, `uint32_t`, and `uint64_t` with the
-semantics specified by ISO 9899:1999§7.18.1.1. If your platform does not
-provide these types, you can try to make them yourself. That should be
-possible unless your platform is really weird. You can remove support
-for `uint64_t` by removing the line
+This source code makes use of the library functions `memcpy`, `memset`,
+`strtoul`, `fread`, and `fwrite`, the latter two are only required if
+you plan to use the functions `freadf` and `fwritef`. The code does not
+use any C99 language constructs but assumes the presence of a header
+`stdint.h` providing the types `uint8_t`, `uint16_t`, `uint32_t`, and
+`uint64_t` with the semantics specified by ISO 9899:1999§7.18.1.1. If
+your platform does not provide these types, you can try to make them
+yourself. That should be possible unless your platform is really weird.
+You can remove support for `uint64_t` by removing the line
 
     case 'l': process(64); break;
 
