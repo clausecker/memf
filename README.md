@@ -18,24 +18,24 @@ Notice that it needs to closely mirror the binary representation:
 
     struct fat_bootsector {
         uint8_t jump_instruction[3];
-	uint8_t oem name[8];
-	uint16_t bytes_per_sector;
-	uint8_t sectors_per_cluster;
-	uint16_t reserved_sectors;
-	uint8_t fat_copies;
-	uint16_t max_dirs;
-	uint16_t sector_count;
-	uint8_t media_descriptor;
-	uint16_t sectors_per_fat;
-	uint16_t sectors_per_head;
-	uint16_t heads;
-	uint32_t hidden_sectors;
-	uint32_t sector_count;
+        uint8_t oem name[8];
+        uint16_t bytes_per_sector;
+        uint8_t sectors_per_cluster;
+        uint16_t reserved_sectors;
+        uint8_t fat_copies;
+        uint16_t max_dirs;
+        uint16_t sector_count;
+        uint8_t media_descriptor;
+        uint16_t sectors_per_fat;
+        uint16_t sectors_per_head;
+        uint16_t heads;
+        uint32_t hidden_sectors;
+        uint32_t sector_count;
     }
 
 Now we can read a binary image of the MBR into this structure:
 
-    mreadf(mbr, "ccc cccccccc hchchhchhhdd", fat_struct);
+    mreadf(mbr, "iccc cccccccc hchchhchhhdd", fat_struct);
 
 It's really that simple.
 
