@@ -31,11 +31,11 @@ Notice that it needs to closely mirror the binary representation:
         uint16_t heads;
         uint32_t hidden_sectors;
         uint32_t sector_count;
-    }
+    } fat_struct;
 
 Now we can read a binary image of the MBR into this structure:
 
-    mreadf(mbr, "iccc cccccccc hchchhchhhdd", fat_struct);
+    mreadf(mbr, "iccc cccccccc hchchhchhhdd", &fat_struct);
 
 It's really that simple.
 
@@ -50,8 +50,8 @@ Supported directives:
     h       read / write uint16_t
     d       read / write uint32_t
     l       read / write uint64_t
-    i       switch to Intel byte order
-    m       switch to Motorola byte order
+    i       switch to Intel (little endian) byte order
+    m       switch to Motorola (big endian) byte order
 
 Future Extensions
 -----------------
@@ -79,27 +79,39 @@ implemented yet. Stay tuned for updates.
 Testability
 -----------
 
-You might have noticed the absence of a length parameter for the buffer these
-functions read from. Such a length paremeter is not required for any usage. The
-number of bytes read from or written to the buffer does only depend only on the
-content of the structure description string. The function `nopf()` allows you to
-compute at runtime how many bytes an invocation of one of the other functions
-would read or write. If you want to verify that your formatting string reads the
-correct number of bytes, use something like this:
+You might have noticed the absence of a length parameter for the buffer
+these functions read from. Such a length parameter is not required for
+any usage. The number of bytes read from or written to the buffer does
+only depend on the content of the structure description string. The
+function `nopf()` allows you to compute at runtime how many bytes an
+invocation of one of the other functions would read or write. If you
+want to verify that your formatting string reads the correct number of
+bytes, use something like this:
 
     #define MY_FORMATTING_STRING "ccc cccccccc hchchhchhhdd"
     assert(nopf(MY_FORMATTING_STRING) == 36);
-    if (mreadf(mbr, "ccc cccccccc hchchhchhhdd", fat_struct) != 36)
+    if (mreadf(mbr, "ccc cccccccc hchchhchhhdd", &fat_struct) != 36)
         /* error handling code here */
 
-You might have also noticed the absence of unit tests for this projects. These
-will be added in the future.
+You might have also noticed the absence of unit tests for this projects.
+These will be added in the future.
+
+Project Goals
+-------------
+
+Portability is the primary concern. All functionality must yield
+identical results on all platforms this code is running on. Thus,
+functionality like providing a flag for native byte order or types of
+platform-dependent width will not be supported. The second concern is
+scarcity. The project shall not contain useless functionality and
+features that take a lot of code to implement for comparably little gain
+shall be omitted.
 
 Portability
 -----------
 
-These functions are designed to be portable and self-contained. They should be
-suitable for a wide range of both hosted and embedded platforms.
+These functions are designed to be portable and self-contained. They
+should be suitable for a wide range of hosted and embedded platforms.
 
 This source code makes use of the library functions `memcpy`, `fread`,
 and `fwrite`, the latter two are only required if you plan to use the
@@ -150,3 +162,10 @@ ABI as the structure it marshalls to / from. If you want to use options
 like -fpack-struct or #pragma pack, you can do that but you need to
 compile the memf code with the same options as the rest of your code or
 it will most likely not work correctly.
+
+Authorship
+----------
+
+Copyright (c) 2015, Robert Clausecker.
+
+See file COPYING for details.
