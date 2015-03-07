@@ -45,14 +45,17 @@ memf(struct rwfile *file, const char *fstr, void *reprarg)
 	tos.rep = 0;
 
 	/* go in repr to next object of type t */
-#define nextobj(t) \
-    {ridx += objlen; ridx = alignto(structalign(t), ridx); objlen = sizeof (t);}
+#define nextobj(t) {							\
+    ridx += objlen;							\
+    ridx = alignto(structalign(t), ridx);				\
+    objlen = sizeof (t);}
 
 	/* access field in repr as object of type t */
 #define rfield(t) (*(t*)(repr + ridx))
 
 	/* checked read / write n bytes from file into / from buffer */
-#define checkrw(n) { if ((count = file->readwrite(file, buf, n)) != n)	\
+#define checkrw(n) {							\
+    if ((count = file->readwrite(file, buf, n)) != n)			\
 	return total;							\
     else								\
 	total += count; }
@@ -63,19 +66,15 @@ memf(struct rwfile *file, const char *fstr, void *reprarg)
 	/* write uintn_t depending on byte order into a */
 #define wbo(n, x) (tos.bo ? wi##n(buf, x) : wm##n(buf, x))
 
-	/* read an n bit quantity from file and store it into repr */
-#define rprocess(n) checkrw(n / 8); rfield(uint##n##_t) = rbo(n);
-
-	/* write an n bit quantity into file after reading it from repr */
-#define wprocess(n) wbo(n, rfield(uint##n##_t)); checkrw(n / 8);
-
 	/* process an n bit quantity, either reading or writing */
 #define process(n)							\
     nextobj(uint##n##_t);						\
     if (file->dir == READ) {						\
-	rprocess(n)							\
+	checkrw(n / 8);							\
+	rfield(uint##n##_t) = rbo(n);					\
     } else if (file->dir == WRITE) {					\
-	wprocess(n)							\
+	wbo(n, rfield(uint##n##_t));					\
+	checkrw(n / 8);							\
     } else /* dir == NOP */ {						\
 	total += n / 8;							\
     }
