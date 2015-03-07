@@ -87,7 +87,7 @@ memf(struct rwfile *file, const char *fstr, void *reprarg)
 
 			return total;
 
-		case ' ': tos.fidx++; continue;
+		case ' ': tos.rep = 0; tos.fidx++; continue;
 
 		case 'i': tos.bo = 1; break;
 		case 'm': tos.bo = 0; break;
