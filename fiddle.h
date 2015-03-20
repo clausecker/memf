@@ -200,7 +200,7 @@ wm8(uint8_t a[1], uint8_t x)
 
 /* hopefully portably alignof macro */
 #define structalign(t) offsetof (struct {char pad; t var;}, var)
-/* lowest value higher than idx aligned to a */
+/* lowest multiple of a not lower than than idx */
 #define alignto(a, idx) (((idx) + (a) - 1) / (a) * (a))
 
 #endif /* FIDDLE_H */
