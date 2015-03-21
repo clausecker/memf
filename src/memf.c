@@ -179,10 +179,10 @@ move_data(struct rwfile *file, char *repr, size_t *ridx, int size, long rep,
 		if (count != size << rep)
 			return count;
 
-		for (i = 0; i < rep; i++, *ridx += 1 << size)
+		for (i = 0; i < rep; i += 1 << size)
 			switch (size) {
-#define RCASE(n) *(uint##n##_t*)(repr + *ridx) =			\
-    bo == MOTOROLA ? rm##n(&buf[i << size]) : ri##n(&buf[i << size]);
+#define RCASE(n) *(uint##n##_t*)(repr + *ridx + i) =			\
+    bo == MOTOROLA ? rm##n(buf + i) : ri##n(buf + i)
 			case 0: RCASE(8); break;
 			case 1: RCASE(16); break;
 			case 2: RCASE(32); break;
@@ -190,11 +190,11 @@ move_data(struct rwfile *file, char *repr, size_t *ridx, int size, long rep,
 #undef RCASE
 			}
 	} else {
-		for (i = 0; i < rep; i++, *ridx += 1 << size)
+		for (i = 0; i < rep; i += 1 << size)
 			switch(size) {
 #define WCASE(n) bo == MOTOROLA						\
-    ? wm##n(&buf[i << size], *(uint##n##_t*)(repr + *ridx))		\
-    : wi##n(&buf[i << size], *(uint##n##_t*)(repr + *ridx));
+    ? wm##n(buf + i, *(uint##n##_t*)(repr + *ridx + i))			\
+    : wi##n(buf + i, *(uint##n##_t*)(repr + *ridx + i))
 			case 0: WCASE(8); break;
 			case 1: WCASE(16); break;
 			case 2: WCASE(32); break;
@@ -205,6 +205,7 @@ move_data(struct rwfile *file, char *repr, size_t *ridx, int size, long rep,
 		count = file->readwrite(file->file, buf, size << rep);
 	}
 
+	*ridx += i;
 	return count;
 }
 
