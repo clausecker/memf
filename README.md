@@ -105,8 +105,8 @@ string is correct, use something like this:
     if (mreadf(mbr, MY_FORMATTING_STRING, &fat_struct) != 36)
         /* error handling code here */
 
-You might have also noticed the absence of unit tests for this projects.
-They are being worked on right now.
+A first set of unit tests for the parser has been written. More are going to
+follow soon.
 
 Project Goals
 -------------

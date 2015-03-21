@@ -42,7 +42,7 @@ begin:
 rescan:
 	switch (fstr[pst->fidx++]) {
 	case '\0':
-		if (pst->lvl != 0)
+		if (pst->lvl != 0 || *rep != 1)
 			errno = EINVAL;
 
 		return 0;
@@ -86,7 +86,7 @@ rescan:
 		pst->stck[pst->lvl].fidx = pst->fidx;
 		pst->stck[pst->lvl].rep = *rep;
 		pst->lvl++;
-		goto rescan;
+		goto begin;
 
 	case ')':
 		if (pst->lvl == 0) {
