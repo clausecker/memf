@@ -1,6 +1,7 @@
 #ifndef FIDDLE_H
 #define FIDDLE_H
 
+#include <stddef.h>
 #include <stdint.h>
 
 /* byte-fiddling functions */
