@@ -35,7 +35,7 @@ Notice that it needs to closely mirror the binary representation:
 
 Now we can read a binary image of the MBR into this structure:
 
-    mreadf(mbr, "iccc cccccccc hchchhchhhdd", &fat_struct);
+    mreadf(mbr, "i3c8chchchhchhhdd", &fat_struct);
 
 It's really that simple.
 
@@ -75,6 +75,17 @@ implemented yet. Stay tuned for updates.
     s       consume next structure item but do not read / write
     r       rewind structure
 
+Build
+-----
+
+To build this project, execute
+
+    sh build.sh
+
+in the top source directory. This creates a static library `memf.a` in
+the `src` directory and then runs the test suite on this library. This
+process is subject to change.
+
 Testability
 -----------
 
@@ -82,18 +93,20 @@ You might have noticed the absence of a length parameter for the buffer
 these functions read from. Such a length parameter is not required for
 any usage. The number of bytes read from or written to the buffer does
 only depend on the content of the structure description string. The
-function `nopf()` allows you to compute at runtime how many bytes an
-invocation of one of the other functions would read or write. If you
-want to verify that your formatting string reads the correct number of
-bytes, use something like this:
+function `mlenf()` allows you to compute at runtime how many bytes an
+invocation of one of the other functions would read or write, the
+function `msizef()` likewise allows you to compute the size of the
+structure marshalled from. If you want to verify that your formatting
+string is correct, use something like this:
 
-    #define MY_FORMATTING_STRING "ccc cccccccc hchchhchhhdd"
-    assert(nopf(MY_FORMATTING_STRING) == 36);
-    if (mreadf(mbr, "ccc cccccccc hchchhchhhdd", &fat_struct) != 36)
+    #define MY_FORMATTING_STRING "i3c8chchchhchhhdd"
+    assert(mlenf(MY_FORMATTING_STRING) == 36);
+    assert(msizef(MY_FORMATTING_STRING) < sizeof fat_struct);
+    if (mreadf(mbr, MY_FORMATTING_STRING, &fat_struct) != 36)
         /* error handling code here */
 
 You might have also noticed the absence of unit tests for this projects.
-These will be added in the future.
+They are being worked on right now.
 
 Project Goals
 -------------
@@ -120,11 +133,6 @@ use any C99 language constructs but assumes the presence of a header
 `uint64_t` with the semantics specified by ISO 9899:1999§7.18.1.1. If
 your platform does not provide these types, you can try to make them
 yourself. That should be possible unless your platform is really weird.
-You can remove support for `uint64_t` by removing the line
-
-    case 'l': process(64); break;
-
-from `memf.c` and all lines containing the number 64 from `fiddle.h`.
 
 This source code makes the following assumptions about the platform it's
 running on:
