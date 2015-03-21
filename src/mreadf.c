@@ -24,7 +24,7 @@ rwmread(void *file, uint8_t *buf, size_t count)
  * Read from source and marshall into repr.
  */
 extern size_t
-mreadf(const uint8_t *source, const char *fstr, void *repr)
+mreadf(const uint8_t *source, const char *fstr, void *restrict repr)
 {
 	struct rwfile rwf = {&rwmread, &source, READ};
 

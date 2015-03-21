@@ -118,7 +118,7 @@ rescan:
  * successfully.
  */
 extern size_t
-memf(struct rwfile *file, const char *fstr, void *reprarg)
+memf(struct rwfile *file, const char *fstr, void *restrict reprarg)
 {
 	struct pstate pst;
 	size_t count, total = 0, ridx = 0;

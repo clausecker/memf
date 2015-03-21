@@ -82,9 +82,17 @@ To build this project, execute
 
     sh build.sh
 
-in the top source directory. This creates a static library `memf.a` in
-the `src` directory and then runs the test suite on this library. This
-process is subject to change.
+in the top source directory. This creates a static library `libmemf.a`
+in the `src` directory and then runs the test suite on this library.
+This process is subject to change.
+
+Stability
+---------
+
+The following things are promised to not change in backwards-incompatible ways:
+
+* The API exposed by `memf.h`
+* The syntax of valid (i.e. non-errno setting) formatting strings
 
 Testability
 -----------

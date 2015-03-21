@@ -20,7 +20,7 @@ rwfread(void *file, uint8_t *buf, size_t count)
  * Read binary data from a FILE* and marshall it into repr as described by fstr.
  */
 extern size_t
-freadf(FILE *file, const char *fstr, void *repr)
+freadf(FILE *file, const char *fstr, void *restrict repr)
 {
 	struct rwfile rwf = { &rwfread, file, READ };
 

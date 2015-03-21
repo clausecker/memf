@@ -42,7 +42,7 @@ struct pstate {
 };
 
 
-extern size_t	memf(struct rwfile*, const char*, void*);
+extern size_t	memf(struct rwfile*, const char*, void *restrict);
 extern int	parsefstr(const char*, struct pstate*, int*, long*);
 
 #endif /* MEMF_INTERNAL_H */
