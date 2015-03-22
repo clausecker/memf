@@ -97,7 +97,7 @@ fails(const struct testcase *c)
 
 	/* ex falso quodlibet */
 	if (errno != 0)
-		return errno == c->errval;
+		return errno != c->errval;
 
 	if (i != c->itemcount)
 		return 1;
