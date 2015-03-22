@@ -1,4 +1,4 @@
-LIB=memf.a
+LIB=libmemf.a
 CFLAGS=-O2
 CC=c99
 

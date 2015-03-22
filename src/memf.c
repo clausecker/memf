@@ -50,8 +50,8 @@ rescan:
 	case ' ':	/* skip blanks */
 		goto begin;
 
-	case 'i': pst->bo = INTEL; *rep = 1; goto begin;
-	case 'm': pst->bo = MOTOROLA; *rep = 1; goto begin;
+	case 'i': pst->bo = INTEL; goto begin;
+	case 'm': pst->bo = MOTOROLA; goto begin;
 
 	case 'z': *size = -1; return 1;
 	case 'c': *size = 0; return 1;
