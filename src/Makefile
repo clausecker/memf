@@ -4,7 +4,7 @@ CC=c99
 
 $(LIB): $(LIB)(memf.o) $(LIB)(freadf.o) $(LIB)(fwritef.o) \
     $(LIB)(mreadf.o) $(LIB)(mwritef.o) $(LIB)(msizef.o) \
-    $(LIB)(mlenf.o)
+    $(LIB)(mlenf.o) $(LIB)(fdreadf.o) $(LIB)(fdwritef.o)
 
 clean:
 	rm -f *.o *.a
