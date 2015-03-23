@@ -57,8 +57,8 @@ Supported directives:
     )       end of group
     z       skip one byte of input / emit \0
 
-Changes in byte order do not propagate out of the group they are done in.
-A group counts as a single item for repetition.
+Changes in byte order do not propagate out of the group they are done
+in. A group counts as a single item for repetition.
 
 Future Extensions
 -----------------
@@ -89,7 +89,8 @@ This process is subject to change.
 Stability
 ---------
 
-The following things are promised to not change in backwards-incompatible ways:
+The following things are promised to not change in incompatible ways
+as soon as the first stable version of this project is released.
 
 * The API exposed by `memf.h`
 * The syntax of valid (i.e. non-errno setting) formatting strings
@@ -113,8 +114,8 @@ string is correct, use something like this:
     if (mreadf(mbr, MY_FORMATTING_STRING, &fat_struct) != 36)
         /* error handling code here */
 
-A first set of unit tests for the parser has been written. More are going to
-follow soon.
+A first set of unit tests for the parser has been written. More tests
+are going to follow soon.
 
 Project Goals
 -------------
