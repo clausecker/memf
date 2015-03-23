@@ -17,7 +17,7 @@ extern size_t mwritef(uint8_t *restrict, const char*, const void*);
 extern size_t fdwritef(int, const char*, const void*);
 extern size_t fdreadf(int, const char*, void *restrict);
 
-extern size_t msizef(const char*);
-extern size_t mlenf(const char*);
+extern size_t sizef(const char*);
+extern size_t lenf(const char*);
 
 #endif /* MEMF_H */
